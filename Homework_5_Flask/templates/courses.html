@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Our Courses</h1>
+
+{% for course in courses %}
+
+<h2>{{ course.name }}</h2>
+
+<p>Teacher: {{ course.teacher }}</p>
+<p>Duration: {{ course.duration }}</p>
+
+<hr>
+
+{% endfor %}
+
+{% endblock %}
