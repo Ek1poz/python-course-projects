@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Books report</title>
+</head>
+<body>
+    <h2>Problematic or expensive books</h2>
+    <ul>
+        {% for b in books %}
+            <li>
+                <strong>{{ b.title }}</strong> (Category: {{ b.category.name }})
+                — Total value: {{ b.total_value }} грн
+            </li>
+        {% empty %}
+            <li>No books found</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Category report</title>
+</head>
+<body>
+    <h2>Category statistics</h2>
+    <ul>
+        {% for cat in categories %}
+            <li>Category «{{ cat.name }}» — books in stock: {{ cat.books_count }}.</li>
+        {% empty %}
+            <li>No categories found</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
