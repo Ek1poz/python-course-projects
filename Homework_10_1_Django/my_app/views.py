@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest
-from django.db.models import F, Q, Count
+from django.db.models import F, Q, Count, QuerySet
 from .models import Category, Book
-
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 def category_report_view(request : HttpRequest) -> HttpResponse:
     """
@@ -15,7 +16,7 @@ def category_report_view(request : HttpRequest) -> HttpResponse:
         books_count = Count('book')
     )
 
-    return render(request, 'category_report.html', {
+    return render(request, 'books/category_report.html', {
         'categories': categories,
     })
 
@@ -34,7 +35,57 @@ def books_report_view(request : HttpRequest) -> HttpResponse:
         Q(stock__lt = 5) | Q(price__gt = 1000)
     ).select_related('category')
 
-    return render(request, 'books_report.html', {
+    return render(request, 'books/books_report.html', {
         'books': books,
     })
 
+
+class BookListView(ListView):
+    """
+    Displays a paginated list of books.
+    Includes basic search filtering by title.
+    """
+    model = Book
+    template_name = 'books/book_list.html'
+    context_object_name = 'books'
+    paginate_by = 5
+
+    def get_queryset(self) -> QuerySet[Book]:
+        """Customizes the queryset to allow search filtering."""
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q')
+        if search_query:
+            queryset = queryset.filter(title__icontains=search_query)
+        return queryset
+
+
+class BookDetailView(DetailView):
+    """Displays detailed information for a single book."""
+    model = Book
+    template_name = 'books/book_detail.html'
+    context_object_name = 'book'
+
+
+class BookCreateView(CreateView):
+    """Provides a form to create a new book."""
+    model = Book
+    template_name = 'books/book_form.html'
+    fields = ['category', 'title', 'author', 'price', 'description', 'stock']
+    success_url = reverse_lazy('books:book_list')
+
+
+class BookUpdateView(UpdateView):
+    """Provides a form to update an existing book."""
+    model = Book
+    template_name = 'books/book_form.html'
+    fields = ['category', 'title', 'author', 'price', 'description', 'stock']
+
+    def get_success_url(self) -> str:
+        return reverse_lazy('books:book_detail', kwargs={'pk': self.object.pk})
+
+
+class BookDeleteView(DeleteView):
+    """Prompts the user to confirm the deletion of a book."""
+    model = Book
+    template_name = 'books/book_confirm_delete.html'
+    success_url = reverse_lazy('books:book_list')

@@ -1,0 +1,31 @@
+{% extends 'books/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Book List</h2>
+    <form method="GET" class="d-flex">
+        <input type="text" name="q" class="form-control me-2" placeholder="Search..." value="{{ request.GET.q|default_if_none:'' }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
+
+<ul class="list-group mb-4">
+    {% for book in books %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{% url 'books:book_detail' book.pk %}" class="text-decoration-none">{{ book.title }}</a>
+            <div>
+                <a href="{% url 'books:book_update' book.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'books:book_delete' book.pk %}" class="btn btn-sm btn-danger">Delete</a>
+            </div>
+        </li>
+    {% empty %}
+        <li class="list-group-item">No books found.</li>
+    {% endfor %}
+</ul>
+
+{% if is_paginated %}
+    <div class="text-muted">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </div>
+{% endif %}
+{% endblock %}
