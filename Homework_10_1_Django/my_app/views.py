@@ -1,19 +1,27 @@
+from django.db.models import Count, F, Q, QuerySet, Model
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
-from django.http import HttpResponse, HttpRequest
-from django.db.models import F, Q, Count, QuerySet
-from .models import Category, Book
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
-def category_report_view(request : HttpRequest) -> HttpResponse:
+from .models import Book, Category
+
+
+def category_report_view(request: HttpRequest) -> HttpResponse:
     """
-        Handles the request to generate a statistical report for categories.
+    Handles the request to generate a statistical report for categories.
 
-        Calculates the total number of books associated with each category
-        using database annotation.
+    Calculates the total number of books associated with each category
+    using database annotation.
     """
     categories = Category.objects.annotate(
-        books_count = Count('book')
+        books_count=Count('book')
     )
 
     return render(request, 'books/category_report.html', {
@@ -21,18 +29,18 @@ def category_report_view(request : HttpRequest) -> HttpResponse:
     })
 
 
-def books_report_view(request : HttpRequest) -> HttpResponse:
+def books_report_view(request: HttpRequest) -> HttpResponse:
     """
-        Handles the request to generate a report for specific books.
+    Handles the request to generate a report for specific books.
 
-        Filters the database for books that are either low in stock (stock < 5)
-        or expensive (price > 1000). It also calculates the total value of
-        the remaining stock for these books.
+    Filters the database for books that are either low in stock (stock < 5)
+    or expensive (price > 1000). It also calculates the total value of
+    the remaining stock for these books.
     """
     books = Book.objects.annotate(
-        total_value = F('price') * F('stock')
+        total_value=F('price') * F('stock')
     ).filter(
-        Q(stock__lt = 5) | Q(price__gt = 1000)
+        Q(stock__lt=5) | Q(price__gt=1000)
     ).select_related('category')
 
     return render(request, 'books/books_report.html', {
@@ -50,7 +58,7 @@ class BookListView(ListView):
     context_object_name = 'books'
     paginate_by = 5
 
-    def get_queryset(self) -> QuerySet[Book]:
+    def get_queryset(self) -> QuerySet[Model, Model]:
         """Customizes the queryset to allow search filtering."""
         queryset = super().get_queryset()
         search_query = self.request.GET.get('q')
