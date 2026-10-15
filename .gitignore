@@ -41,3 +41,6 @@ dist/
 htmlcov/
 
 media/
+
+django_errors.log
+*.log

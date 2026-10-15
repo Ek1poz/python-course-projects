@@ -1,5 +1,6 @@
 from django.contrib import admin
-from my_app.models import Category, Book
+from django.contrib.auth.admin import UserAdmin
+from my_app.models import Category, Book, CustomUser
 
 
 class BookInLine(admin.TabularInline):
@@ -31,3 +32,18 @@ class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'price', 'stock', 'category')
     list_filter = ('category', 'author')
     search_fields = ('title', 'author')
+
+
+@admin.register(CustomUser)
+class CustomUserAdmin(UserAdmin):
+    """
+    Admin panel configuration for the CustomUser model.
+    """
+    fieldsets = UserAdmin.fieldsets + (
+        ('Additional Information',
+         {'fields': ('phone_number', 'date_of_birth')}),
+    )
+    add_fieldsets = UserAdmin.add_fieldsets + (
+        ('Additional Information',
+         {'fields': ('phone_number', 'date_of_birth')}),
+    )

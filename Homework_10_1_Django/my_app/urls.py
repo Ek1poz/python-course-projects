@@ -6,7 +6,10 @@ from .views import (
     BookDetailView,
     BookCreateView,
     BookDeleteView,
-    BookUpdateView)
+    BookUpdateView,
+    UserLoginView,
+    UserLogoutView,
+    RegisterView)
 
 app_name = 'books'
 
@@ -18,4 +21,7 @@ urlpatterns = [
     path('add/', BookCreateView.as_view(), name='book_create'),
     path('<int:pk>/update/', BookUpdateView.as_view(), name='book_update'),
     path('<int:pk>/delete/', BookDeleteView.as_view(), name='book_delete'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', UserLoginView.as_view(), name='login'),
+    path('logout/', UserLogoutView.as_view(), name='logout'),
 ]

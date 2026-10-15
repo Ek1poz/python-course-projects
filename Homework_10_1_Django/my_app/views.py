@@ -1,3 +1,11 @@
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    PermissionRequiredMixin
+)
+from django.contrib.auth.views import (
+    LoginView,
+    LogoutView
+)
 from django.db.models import Count, F, Q, QuerySet, Model
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
@@ -9,8 +17,8 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
-
 from .models import Book, Category
+from .forms import CustomUserCreationForm
 
 
 def category_report_view(request: HttpRequest) -> HttpResponse:
@@ -74,26 +82,49 @@ class BookDetailView(DetailView):
     context_object_name = 'book'
 
 
-class BookCreateView(CreateView):
+class BookCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     """Provides a form to create a new book."""
     model = Book
     template_name = 'books/book_form.html'
     fields = ['category', 'title', 'author', 'price', 'description', 'stock']
     success_url = reverse_lazy('books:book_list')
+    permission_required = 'my_app.add_book'
 
 
-class BookUpdateView(UpdateView):
+class BookUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """Provides a form to update an existing book."""
     model = Book
     template_name = 'books/book_form.html'
     fields = ['category', 'title', 'author', 'price', 'description', 'stock']
+    permission_required = 'my_app.change_book'
 
     def get_success_url(self) -> str:
         return reverse_lazy('books:book_detail', kwargs={'pk': self.object.pk})
 
 
-class BookDeleteView(DeleteView):
+class BookDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     """Prompts the user to confirm the deletion of a book."""
     model = Book
     template_name = 'books/book_confirm_delete.html'
     success_url = reverse_lazy('books:book_list')
+    permission_required = 'my_app.delete_book'
+
+
+class RegisterView(CreateView):
+    """Provides a form to register a new user."""
+    form_class = CustomUserCreationForm
+    template_name = 'books/register.html'
+    success_url = reverse_lazy('books:login')
+
+
+class UserLoginView(LoginView):
+    """Provides a form to log in a user."""
+    template_name = 'books/login.html'
+
+    def get_success_url(self) -> str:
+        return str(reverse_lazy('books:book_list'))
+
+
+class UserLogoutView(LogoutView):
+    """Provides a form to log out a user."""
+    next_page = reverse_lazy('books:book_list')
