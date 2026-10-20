@@ -23,7 +23,7 @@ urlpatterns = [
     path('books/', include('my_app.urls', namespace='books')),
 ]
 
-if settings.DEBUG:
-    urlpatterns = [
-        path('__debug__/', include('debug_toolbar.urls')),
-    ] + urlpatterns
+# if settings.DEBUG:
+#     urlpatterns = [
+#         path('__debug__/', include('debug_toolbar.urls')),
+#     ] + urlpatterns

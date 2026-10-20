@@ -44,3 +44,5 @@ media/
 
 django_errors.log
 *.log
+
+staticfiles/
