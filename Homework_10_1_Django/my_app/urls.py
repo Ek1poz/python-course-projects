@@ -29,6 +29,10 @@ urlpatterns = [
     path("logout/", UserLogoutView.as_view(), name="logout"),
     path("cart/add/<int:book_id>/", views.cart_add, name="cart_add"),
     path("cart/remove/<int:book_id>/", views.cart_remove, name="cart_remove"),
-    path("checkout/", views.order_create, name="order_create"),
     path('cart/clear/', views.cart_clear, name='cart_clear'),
+    path('cart/', views.cart_detail, name='cart_detail'),
+    path('payment/process/<int:order_id>/', views.payment_process, name='payment_process'),
+    path('payment/completed/', views.payment_completed, name='payment_completed'),
+    path('payment/canceled/', views.payment_canceled, name='payment_canceled'),
+    path('checkout/', views.order_create, name='order_create'),
 ]

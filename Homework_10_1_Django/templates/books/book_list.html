@@ -8,7 +8,7 @@
             <input type="text" name="q" class="form-control me-2" placeholder="Search..." value="{{ request.GET.q|default_if_none:'' }}">
             <button type="submit" class="btn btn-primary">Search</button>
         </form>
-        <a href="{% url 'books:order_create' %}" class="btn btn-success">Checkout</a>
+        <a href="{% url 'books:cart_detail' %}" class="btn btn-primary">View Cart</a>
     </div>
 </div>
 

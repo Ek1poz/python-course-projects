@@ -1,0 +1,10 @@
+{% extends "books/base.html" %}
+{% block content %}
+<div style="text-align: center; margin-top: 50px;">
+    <h2 style="color: #dc3545;">Payment Canceled</h2>
+    <p>There was a problem processing your payment, or you changed your mind.</p>
+    <p>Your order was not paid.</p>
+    <br>
+    <a href="{% url 'books:book_list' %}" style="background-color: #6c757d; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Try Again</a>
+</div>
+{% endblock %}

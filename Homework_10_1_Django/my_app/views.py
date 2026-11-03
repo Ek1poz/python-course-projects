@@ -13,7 +13,7 @@ from django.db import transaction
 from django.db.models import Count, F, Q, QuerySet, Model
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.decorators.http import require_POST
 from django.views.generic import (
     CreateView,
@@ -153,23 +153,26 @@ class UserLogoutView(LogoutView):
     next_page = reverse_lazy("books:book_list")
 
 
-def order_create(request: HttpRequest) -> HttpResponse:
+def cart_detail(request: HttpRequest) -> HttpResponse:
     """
-    Handle order creation, process cart items, send confirmation email,
-    and redirect to Stripe Checkout using an atomic database transaction.
+    Render the cart detail page displaying all added items.
     """
     cart = Cart(request)
+    return render(request, "cart/detail.html", {"cart": cart})
 
+
+def order_create(request: HttpRequest) -> HttpResponse:
+    """
+    Create an order from cart items, clear the cart, and redirect to payment processing.
+    """
+    cart = Cart(request)
     if request.method == "POST":
-        first_name: str = request.POST.get("first_name", "")
-        last_name: str = request.POST.get("last_name", "")
-        email: str = request.POST.get("email", "")
-
         with transaction.atomic():
-            order: Order = Order.objects.create(
-                first_name=first_name, last_name=last_name, email=email
+            order = Order.objects.create(
+                first_name=request.POST.get("first_name"),
+                last_name=request.POST.get("last_name"),
+                email=request.POST.get("email"),
             )
-
             for item in cart:
                 OrderItem.objects.create(
                     order=order,
@@ -177,47 +180,70 @@ def order_create(request: HttpRequest) -> HttpResponse:
                     price=item["price"],
                     quantity=item["quantity"],
                 )
-
             cart.clear()
+            return redirect("books:payment_process", order_id=order.id)
 
-            send_mail(
-                subject=f"Order #{order.id} Confirmation",
-                message=f"Dear {order.first_name}, your order has been successfully placed.",
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[order.email],
-                fail_silently=True,
-            )
+    return render(request, "orders/create.html", {"cart": cart})
 
-            session = stripe.checkout.Session.create(
-                payment_method_types=["card"],
-                line_items=[
-                    {
-                        "price_data": {
-                            "currency": "usd",
-                            "product_data": {"name": f"Order {order.id}"},
-                            "unit_amount": int(order.get_total_cost() * 100),
-                        },
-                        "quantity": 1,
-                    }
-                ],
-                mode="payment",
-                success_url=request.build_absolute_uri("/books/") + "?success=true",
-                cancel_url=request.build_absolute_uri("/books/") + "?canceled=true",
-            )
-            return redirect(session.url, code=303)
 
-    return render(request, 'orders/create.html', {'cart': cart})
+def payment_process(request: HttpRequest, order_id: int) -> HttpResponse:
+    """
+    Initiate a Stripe checkout session for the specified order.
+    """
+    order = get_object_or_404(Order, id=order_id)
+
+    if request.method == "POST":
+        success_url = request.build_absolute_uri(reverse("books:payment_completed"))
+        cancel_url = request.build_absolute_uri(reverse("books:payment_canceled"))
+
+        session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            line_items=[
+                {
+                    "price_data": {
+                        "currency": "usd",
+                        "product_data": {"name": f"Order {order.id}"},
+                        "unit_amount": int(order.get_total_cost() * 100),
+                    },
+                    "quantity": 1,
+                }
+            ],
+            mode="payment",
+            success_url=success_url,
+            cancel_url=cancel_url,
+        )
+        return redirect(session.url, code=303)
+
+    return render(request, 'orders/process.html', {'order': order})
+
+
+def payment_completed(request: HttpRequest) -> HttpResponse:
+    """
+    Render the successful payment completion page.
+    """
+    return render(request, "orders/completed.html")
+
+
+def payment_canceled(request: HttpRequest) -> HttpResponse:
+    """
+    Render the payment cancellation page.
+    """
+    return render(request, "orders/canceled.html")
 
 
 @require_POST
 def cart_add(request: HttpRequest, book_id: int) -> HttpResponse:
     """
-    Add a selected book to the cart and redirect to check out.
+    Add a selected book to the cart or update its quantity.
     """
     cart = Cart(request)
     book = get_object_or_404(Book, id=book_id)
-    cart.add(book=book, quantity=1)
-    return redirect('books:order_create')
+    quantity = int(request.POST.get("quantity", 1))
+    override = request.POST.get('override') == 'True'
+    cart.add(book=book, quantity=quantity, override_quantity=override)
+
+    return redirect('books:cart_detail')
+
 
 @require_POST
 def cart_remove(request, book_id):
@@ -227,7 +253,8 @@ def cart_remove(request, book_id):
     cart = Cart(request)
     book = get_object_or_404(Book, id=book_id)
     cart.remove(book)
-    return redirect('books:order_create')
+    return redirect('books:cart_detail')
+
 
 @require_POST
 def cart_clear(request):
@@ -236,4 +263,4 @@ def cart_clear(request):
     """
     cart = Cart(request)
     cart.clear()
-    return redirect('books:order_create')
+    return redirect('books:cart_detail')
