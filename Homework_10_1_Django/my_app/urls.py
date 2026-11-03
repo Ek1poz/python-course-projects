@@ -1,5 +1,8 @@
 from django.urls import path
+
+from . import views
 from .views import (
+    cart_add,
     category_report_view,
     books_report_view,
     BookListView,
@@ -14,14 +17,18 @@ from .views import (
 app_name = 'books'
 
 urlpatterns = [
-    path('category_report/', category_report_view, name='category_report'),
-    path('books_report/', books_report_view, name='books_report'),
-    path('', BookListView.as_view(), name='book_list'),
-    path('<int:pk>/', BookDetailView.as_view(), name='book_detail'),
-    path('add/', BookCreateView.as_view(), name='book_create'),
-    path('<int:pk>/update/', BookUpdateView.as_view(), name='book_update'),
-    path('<int:pk>/delete/', BookDeleteView.as_view(), name='book_delete'),
-    path('register/', RegisterView.as_view(), name='register'),
-    path('login/', UserLoginView.as_view(), name='login'),
-    path('logout/', UserLogoutView.as_view(), name='logout'),
+    path("category_report/", category_report_view, name="category_report"),
+    path("books_report/", books_report_view, name="books_report"),
+    path("", BookListView.as_view(), name="book_list"),
+    path("<int:pk>/", BookDetailView.as_view(), name="book_detail"),
+    path("add/", BookCreateView.as_view(), name="book_create"),
+    path("<int:pk>/update/", BookUpdateView.as_view(), name="book_update"),
+    path("<int:pk>/delete/", BookDeleteView.as_view(), name="book_delete"),
+    path("register/", RegisterView.as_view(), name="register"),
+    path("login/", UserLoginView.as_view(), name="login"),
+    path("logout/", UserLogoutView.as_view(), name="logout"),
+    path("cart/add/<int:book_id>/", views.cart_add, name="cart_add"),
+    path("cart/remove/<int:book_id>/", views.cart_remove, name="cart_remove"),
+    path("checkout/", views.order_create, name="order_create"),
+    path('cart/clear/', views.cart_clear, name='cart_clear'),
 ]

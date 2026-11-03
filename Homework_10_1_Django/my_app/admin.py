@@ -1,6 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from my_app.models import Category, Book, CustomUser
+from my_app.models import (
+    Category,
+    Book,
+    CustomUser,
+    Order,
+    OrderItem
+)
 
 
 class BookInLine(admin.TabularInline):
@@ -47,3 +53,22 @@ class CustomUserAdmin(UserAdmin):
         ('Additional Information',
          {'fields': ('phone_number', 'date_of_birth')}),
     )
+
+
+class OrderItemInline(admin.TabularInline):
+    """
+    Inline admin descriptor for OrderItem objects.
+    """
+    model = OrderItem
+    raw_id_fields = ['book']
+    extra = 0
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    """
+    Admin view configuration for Order objects.
+    """
+    list_display = ['id', 'first_name', 'last_name', 'email', 'paid', 'created_at']
+    list_filter = ['paid', 'created_at']
+    inlines = [OrderItemInline]

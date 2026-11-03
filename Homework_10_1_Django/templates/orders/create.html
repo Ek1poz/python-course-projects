@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout</title>
+</head>
+<body style="padding: 20px; font-family: sans-serif;">
+    <h2>Your Cart</h2>
+    <ul>
+    {% for item in cart %}
+        <li>{{ item.book.title }} - {{ item.quantity }} шт. - ${{ item.total_price }}
+            <form action="{% url 'books:cart_remove' item.book.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" style="color: red;">Видалити</button>
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+    <form action="{% url 'books:cart_clear' %}" method="post" style="margin-top: 10px;">
+        {% csrf_token %}
+        <button type="submit" style="background-color: #dc3545; color: white; padding: 5px 10px; border: none; cursor: pointer;">Clear the whole cart</button>
+    </form>
+<h3>До сплати: ${{ cart.get_total_price }}</h3>
+
+<form action="{% url 'books:order_create' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="first_name" placeholder="First name" required>
+    <input type="text" name="last_name" placeholder="Last name" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <button type="submit">Pay with Stripe</button>
+</form>
+
+<a href="{% url 'books:book_list' %}" style="display: inline-block; margin-top: 20px; padding: 8px 15px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 4px;">&larr; Back to list</a>
+
+</body>
+</html>
