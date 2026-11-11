@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class CustomUser(AbstractUser):
@@ -10,12 +11,12 @@ class CustomUser(AbstractUser):
         max_length=15,
         unique=True,
         blank=True,
-        verbose_name='phone number'
+        verbose_name=_('phone number')
     )
     date_of_birth = models.DateField(
         null=True,
         blank=True,
-        verbose_name='date of birth'
+        verbose_name=_('date of birth')
     )
 
     def __str__(self) -> str:
@@ -31,7 +32,7 @@ class Category(models.Model):
     """
     name = models.CharField(
         max_length=100,
-        verbose_name='name',
+        verbose_name=_('name'),
         default=''
     )
     slug = models.SlugField(unique=True)
@@ -51,18 +52,18 @@ class Book(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(
         max_length=100,
-        verbose_name='title',
+        verbose_name=_('title'),
         default=''
     )
     author = models.CharField(
         max_length=100,
-        verbose_name='author',
+        verbose_name=_('author'),
         default=''
     )
     price = models.DecimalField(
         max_digits=8,
         decimal_places=2,
-        verbose_name='price',
+        verbose_name=_('price'),
         default=''
     )
     description = models.TextField()
@@ -82,25 +83,25 @@ class Order(models.Model):
     """
     first_name = models.CharField(
         max_length=50,
-        verbose_name='First name'
+        verbose_name=_('First name')
     )
     last_name = models.CharField(
         max_length=50,
-        verbose_name='Last name'
+        verbose_name=_('Last name')
     )
     email = models.EmailField(
-        verbose_name='Email'
+        verbose_name=_('Email')
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name='Created at'
+        verbose_name=_('Created at')
     )
     paid = models.BooleanField(
         default=False,
-        verbose_name='Paid'
+        verbose_name=_('Paid')
     )
     stripe_id = models.CharField(
-        max_length=250, blank=True, verbose_name="ID of payment Stripe"
+        max_length=250, blank=True, verbose_name=_("ID of payment Stripe")
     )
 
     class Meta:
@@ -136,11 +137,11 @@ class OrderItem(models.Model):
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        verbose_name="Price"
+        verbose_name=_("Price")
     )
     quantity = models.PositiveIntegerField(
         default=1,
-        verbose_name="Quantity"
+        verbose_name=_("Quantity")
     )
 
     def __str__(self):

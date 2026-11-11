@@ -1,0 +1,279 @@
+msgid ""
+msgstr ""
+"Language: uk\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+msgid "phone number"
+msgstr "номер телефону"
+
+msgid "date of birth"
+msgstr "дата народження"
+
+msgid "name"
+msgstr "назва"
+
+msgid "title"
+msgstr "назва"
+
+msgid "author"
+msgstr "автор"
+
+msgid "price"
+msgstr "ціна"
+
+msgid "First name"
+msgstr "Ім’я"
+
+msgid "Last name"
+msgstr "Прізвище"
+
+msgid "First Name"
+msgstr "Ім’я"
+
+msgid "Last Name"
+msgstr "Прізвище"
+
+msgid "Email"
+msgstr "Електронна пошта"
+
+msgid "Created at"
+msgstr "Створено"
+
+msgid "Paid"
+msgstr "Оплачено"
+
+msgid "ID of payment Stripe"
+msgstr "Ідентифікатор платежу Stripe"
+
+msgid "Price"
+msgstr "Ціна"
+
+msgid "Quantity"
+msgstr "Кількість"
+
+msgid "Phone number"
+msgstr "Номер телефону"
+
+msgid "Date of birth"
+msgstr "Дата народження"
+
+msgid "Book Store"
+msgstr "Книгарня"
+
+msgid "Django Store"
+msgstr "Книгарня Django"
+
+msgid "Add Book"
+msgstr "Додати книгу"
+
+msgid "Language"
+msgstr "Мова"
+
+msgid "Change language"
+msgstr "Змінити мову"
+
+msgid "Hello, %(username)s!"
+msgstr "Вітаємо, %(username)s!"
+
+msgid "Logout"
+msgstr "Вийти"
+
+msgid "Login"
+msgstr "Увійти"
+
+msgid "Register"
+msgstr "Зареєструватися"
+
+msgid "Book List"
+msgstr "Список книг"
+
+msgid "Search..."
+msgstr "Пошук..."
+
+msgid "Search"
+msgstr "Шукати"
+
+msgid "View Cart"
+msgstr "Переглянути кошик"
+
+msgid "Add to Cart"
+msgstr "Додати до кошика"
+
+msgid "Edit"
+msgstr "Редагувати"
+
+msgid "Delete"
+msgstr "Видалити"
+
+msgid "No books found."
+msgstr "Книг не знайдено."
+
+msgid "Page %(current)s of %(total)s"
+msgstr "Сторінка %(current)s з %(total)s"
+
+msgid "Author:"
+msgstr "Автор:"
+
+msgid "Price:"
+msgstr "Ціна:"
+
+msgid "Stock:"
+msgstr "У наявності:"
+
+msgid "Back to list"
+msgstr "Назад до списку"
+
+msgid "Edit Book"
+msgstr "Редагувати книгу"
+
+msgid "Create Book"
+msgstr "Створити книгу"
+
+msgid "Save"
+msgstr "Зберегти"
+
+msgid "Cancel"
+msgstr "Скасувати"
+
+msgid "Don't have an account?"
+msgstr "Ще не маєте облікового запису?"
+
+msgid "Register here"
+msgstr "Зареєструйтеся"
+
+msgid "Create Account"
+msgstr "Створити обліковий запис"
+
+msgid "Already have an account?"
+msgstr "Вже маєте обліковий запис?"
+
+msgid "Login here"
+msgstr "Увійдіть"
+
+msgid "Delete Book"
+msgstr "Видалити книгу"
+
+msgid "Are you sure you want to delete the book"
+msgstr "Ви впевнені, що хочете видалити книгу"
+
+msgid "Yes, delete"
+msgstr "Так, видалити"
+
+msgid "Books report"
+msgstr "Звіт про книги"
+
+msgid "Low-stock or expensive books"
+msgstr "Книги з малим залишком або високою ціною"
+
+msgid "Category:"
+msgstr "Категорія:"
+
+msgid "Total stock value:"
+msgstr "Загальна вартість залишку:"
+
+msgid "Category report"
+msgstr "Звіт про категорії"
+
+msgid "Category statistics"
+msgstr "Статистика категорій"
+
+msgid "Category \"%(name)s\" — books in stock: %(book_count)s."
+msgstr "Категорія «%(name)s» — книг у наявності: %(book_count)s."
+
+msgid "No categories found."
+msgstr "Категорій не знайдено."
+
+msgid "Your Shopping Cart"
+msgstr "Ваш кошик"
+
+msgid "Product"
+msgstr "Товар"
+
+msgid "Unit Price"
+msgstr "Ціна за одиницю"
+
+msgid "Total Price"
+msgstr "Загальна вартість"
+
+msgid "Actions"
+msgstr "Дії"
+
+msgid "Update"
+msgstr "Оновити"
+
+msgid "Remove"
+msgstr "Видалити"
+
+msgid "Total to pay:"
+msgstr "До сплати:"
+
+msgid "Continue Shopping"
+msgstr "Продовжити покупки"
+
+msgid "Clear Cart"
+msgstr "Очистити кошик"
+
+msgid "Proceed to Checkout"
+msgstr "Перейти до оформлення"
+
+msgid "Your cart is currently empty"
+msgstr "Ваш кошик порожній"
+
+msgid "Return to Shop"
+msgstr "Повернутися до магазину"
+
+msgid "Checkout"
+msgstr "Оформлення замовлення"
+
+msgid "Order Summary"
+msgstr "Підсумок замовлення"
+
+msgid "Email Address"
+msgstr "Електронна пошта"
+
+msgid "Confirm and Proceed to Payment"
+msgstr "Підтвердити та перейти до оплати"
+
+msgid "Back to Cart"
+msgstr "Повернутися до кошика"
+
+msgid "Payment for Order #%(order_id)s"
+msgstr "Оплата замовлення №%(order_id)s"
+
+msgid "Amount to pay:"
+msgstr "Сума до сплати:"
+
+msgid "Pay with Stripe"
+msgstr "Оплатити через Stripe"
+
+msgid "Cancel and Return"
+msgstr "Скасувати й повернутися"
+
+msgid "Payment Successfully Completed!"
+msgstr "Оплату успішно завершено!"
+
+msgid "Thank you for your order. It has been successfully paid and is being processed."
+msgstr "Дякуємо за замовлення. Його оплачено, і воно вже обробляється."
+
+msgid "Payment Canceled"
+msgstr "Оплату скасовано"
+
+msgid "There was a problem processing your payment, or you changed your mind."
+msgstr "Під час оплати сталася помилка або ви передумали."
+
+msgid "Your order was not paid."
+msgstr "Ваше замовлення не оплачено."
+
+msgid "Try Again"
+msgstr "Спробувати ще раз"
+
+msgid "Book not found."
+msgstr "Книгу не знайдено."
+
+msgid "Order confirmation"
+msgstr "Підтвердження замовлення"
+
+msgid "Thank you for your order. Your order number is %(order_id)s."
+msgstr "Дякуємо за замовлення. Номер вашого замовлення: %(order_id)s."

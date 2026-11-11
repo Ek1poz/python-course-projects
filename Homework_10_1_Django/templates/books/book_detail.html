@@ -1,9 +1,10 @@
 {% extends 'books/base.html' %}
+{% load i18n %}
 
 {% block content %}
 <h2>{{ book.title }}</h2>
-<p><strong>Author:</strong> {{ book.author }}</p>
-<p><strong>Price:</strong> {{ book.price }}</p>
-<p><strong>Stock:</strong> {{ book.stock }}</p>
-<a href="{% url 'books:book_list' %}" class="btn btn-primary">Back to list</a>
+<p><strong>{% translate "Author:" %}</strong> {{ book.author }}</p>
+<p><strong>{% translate "Price:" %}</strong> {{ book.price }}</p>
+<p><strong>{% translate "Stock:" %}</strong> {{ book.stock }}</p>
+<a href="{% url 'books:book_list' %}" class="btn btn-primary">{% translate "Back to list" %}</a>
 {% endblock %}

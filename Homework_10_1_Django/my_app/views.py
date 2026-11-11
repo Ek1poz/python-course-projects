@@ -11,10 +11,11 @@ from django.contrib.auth.views import (
 from django.core.mail import send_mail
 from django.db import transaction
 from django.db.models import Count, F, Q, QuerySet, Model
-from django.http import HttpRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.decorators.http import require_POST
+from django.utils.translation import gettext as _
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -30,38 +31,45 @@ from .forms import CustomUserCreationForm
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
-def category_report_view(request: HttpRequest) -> HttpResponse:
+async def category_report_async(request: HttpRequest) -> HttpResponse:
     """
-    Handles the request to generate a statistical report for categories.
-
-    Calculates the total number of books associated with each category
-    using database annotation.
+    Render category statistics using Django's asynchronous ORM iterator.
     """
-    categories = Category.objects.annotate(
-        books_count=Count('book')
-    )
-
+    categories = [
+        category async for category in Category.objects.annotate(
+            books_count=Count('book')
+        ).aiterator()
+    ]
     return render(request, 'books/category_report.html', {
         'categories': categories,
     })
 
 
-def books_report_view(request: HttpRequest) -> HttpResponse:
+async def books_report_async(request: HttpRequest) -> HttpResponse:
     """
-    Handles the request to generate a report for specific books.
-
-    Filters the database for books that are either low in stock (stock < 5)
-    or expensive (price > 1000). It also calculates the total value of
-    the remaining stock for these books.
+    Render the low-stock and expensive-books report asynchronously.
     """
-    books = Book.objects.annotate(
+    queryset = Book.objects.annotate(
         total_value=F('price') * F('stock')
     ).filter(
         Q(stock__lt=5) | Q(price__gt=1000)
     ).select_related('category')
-
+    books = [book async for book in queryset.aiterator()]
     return render(request, 'books/books_report.html', {
-        'books': books,
+        'books': books
+    })
+
+
+async def book_detail_async(request: HttpRequest, pk: int) -> HttpResponse:
+    """
+    Display a book using an asynchronous database lookup.
+    """
+    try:
+        book = await Book.objects.select_related('category').aget(pk=pk)
+    except Book.DoesNotExist as error:
+        raise Http404(_('Book not found.')) from error
+    return render(request, 'books/book_detail.html', {
+        'book': book
     })
 
 
@@ -77,7 +85,7 @@ class BookListView(ListView):
 
     def get_queryset(self) -> QuerySet[Model, Model]:
         """Customizes the queryset to allow search filtering."""
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().order_by('pk')
         search_query = self.request.GET.get('q')
         if search_query:
             queryset = queryset.filter(title__icontains=search_query)
@@ -181,7 +189,15 @@ def order_create(request: HttpRequest) -> HttpResponse:
                     quantity=item["quantity"],
                 )
             cart.clear()
-            return redirect("books:payment_process", order_id=order.id)
+        send_mail(
+            subject=_('Order confirmation'),
+            message=_('Thank you for your order. Your order number is %(order_id)s.')
+            % {'order_id': order.pk},
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[order.email],
+            fail_silently=False,
+        )
+        return redirect("books:payment_process", order_id=order.id)
 
     return render(request, "orders/create.html", {"cart": cart})
 
@@ -212,9 +228,11 @@ def payment_process(request: HttpRequest, order_id: int) -> HttpResponse:
             success_url=success_url,
             cancel_url=cancel_url,
         )
-        return redirect(session.url, code=303)
+        return HttpResponse(status=303, headers={'Location': session.url})
 
-    return render(request, 'orders/process.html', {'order': order})
+    return render(request, 'orders/process.html', {
+        'order': order
+    })
 
 
 def payment_completed(request: HttpRequest) -> HttpResponse:

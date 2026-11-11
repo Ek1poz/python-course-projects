@@ -1,11 +1,12 @@
 {% extends 'books/base.html' %}
+{% load i18n %}
 
 {% block content %}
-<h2>Delete Book</h2>
-<p>Are you sure you want to delete the book <strong>"{{ book.title }}"</strong>?</p>
+<h2>{% translate "Delete Book" %}</h2>
+<p>{% translate "Are you sure you want to delete the book" %} <strong>"{{ book.title }}"</strong>?</p>
 <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Yes, delete</button>
-    <a href="{% url 'books:book_list' %}" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-danger">{% translate "Yes, delete" %}</button>
+    <a href="{% url 'books:book_list' %}" class="btn btn-secondary">{% translate "Cancel" %}</a>
 </form>
 {% endblock %}

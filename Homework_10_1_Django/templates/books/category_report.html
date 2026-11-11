@@ -1,16 +1,17 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Category report</title>
+    <title>{% translate "Category report" %}</title>
 </head>
 <body>
-    <h2>Category statistics</h2>
+    <h2>{% translate "Category statistics" %}</h2>
     <ul>
         {% for cat in categories %}
-            <li>Category «{{ cat.name }}» — books in stock: {{ cat.books_count }}.</li>
+            <li>{% blocktranslate with name=cat.name book_count=cat.books_count %}Category "{{ name }}" — books in stock: {{ book_count }}.{% endblocktranslate %}</li>
         {% empty %}
-            <li>No categories found</li>
+            <li>{% translate "No categories found." %}</li>
         {% endfor %}
     </ul>
 

@@ -1,19 +1,20 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Books report</title>
+    <title>{% translate "Books report" %}</title>
 </head>
 <body>
-    <h2>Problematic or expensive books</h2>
+    <h2>{% translate "Low-stock or expensive books" %}</h2>
     <ul>
         {% for b in books %}
             <li>
-                <strong>{{ b.title }}</strong> (Category: {{ b.category.name }})
-                — Total value: {{ b.total_value }} грн
+                <strong>{{ b.title }}</strong> ({% translate "Category:" %} {{ b.category.name }})
+                — {% translate "Total stock value:" %} {{ b.total_value }}
             </li>
         {% empty %}
-            <li>No books found</li>
+            <li>{% translate "No books found." %}</li>
         {% endfor %}
     </ul>
 

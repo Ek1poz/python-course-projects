@@ -1,0 +1,6 @@
+[run]
+omit =
+    my_app/tests/*
+
+[report]
+fail_under = 70

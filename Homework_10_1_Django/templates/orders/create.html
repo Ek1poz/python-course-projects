@@ -1,34 +1,35 @@
 {% extends "books/base.html" %}
+{% load i18n %}
 {% block content %}
 <div style="max-width: 500px; margin: 0 auto; padding: 20px;">
-    <h2>Checkout</h2>
+    <h2>{% translate "Checkout" %}</h2>
     
     <div style="background-color: #f8f9fa; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
-        <h4>Order Summary</h4>
-        <p style="margin: 0; font-size: 18px;"><strong>Total to pay: ${{ cart.get_total_price }}</strong></p>
+        <h4>{% translate "Order Summary" %}</h4>
+        <p style="margin: 0; font-size: 18px;"><strong>{% translate "Total to pay:" %} ${{ cart.get_total_price }}</strong></p>
     </div>
 
     <form action="{% url 'books:order_create' %}" method="post">
         {% csrf_token %}
         <div style="margin-bottom: 15px;">
-            <label for="first_name" style="display: block; margin-bottom: 5px;">First Name</label>
+            <label for="first_name" style="display: block; margin-bottom: 5px;">{% translate "First Name" %}</label>
             <input type="text" name="first_name" id="first_name" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
         </div>
         <div style="margin-bottom: 15px;">
-            <label for="last_name" style="display: block; margin-bottom: 5px;">Last Name</label>
+            <label for="last_name" style="display: block; margin-bottom: 5px;">{% translate "Last Name" %}</label>
             <input type="text" name="last_name" id="last_name" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
         </div>
         <div style="margin-bottom: 20px;">
-            <label for="email" style="display: block; margin-bottom: 5px;">Email Address</label>
+            <label for="email" style="display: block; margin-bottom: 5px;">{% translate "Email Address" %}</label>
             <input type="email" name="email" id="email" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
         </div>
         <button type="submit" style="background-color: #0d6efd; color: white; padding: 12px 20px; width: 100%; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;">
-            Confirm and Proceed to Payment
+            {% translate "Confirm and Proceed to Payment" %}
         </button>
     </form>
     
     <div style="margin-top: 15px; text-align: center;">
-        <a href="{% url 'books:cart_detail' %}" style="color: #6c757d; text-decoration: none;">&larr; Back to Cart</a>
+        <a href="{% url 'books:cart_detail' %}" style="color: #6c757d; text-decoration: none;">&larr; {% translate "Back to Cart" %}</a>
     </div>
 </div>
 {% endblock %}

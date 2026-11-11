@@ -1,14 +1,15 @@
 {% extends 'books/base.html' %}
+{% load i18n %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Book List</h2>
+    <h2>{% translate "Book List" %}</h2>
     <div class="d-flex align-items-center">
         <form method="GET" class="d-flex me-3">
-            <input type="text" name="q" class="form-control me-2" placeholder="Search..." value="{{ request.GET.q|default_if_none:'' }}">
-            <button type="submit" class="btn btn-primary">Search</button>
+            <input type="text" name="q" class="form-control me-2" placeholder="{% translate 'Search...' %}" value="{{ request.GET.q|default_if_none:'' }}">
+            <button type="submit" class="btn btn-primary">{% translate "Search" %}</button>
         </form>
-        <a href="{% url 'books:cart_detail' %}" class="btn btn-primary">View Cart</a>
+        <a href="{% url 'books:cart_detail' %}" class="btn btn-primary">{% translate "View Cart" %}</a>
     </div>
 </div>
 
@@ -19,20 +20,20 @@
             <div>
                 <form action="{% url 'books:cart_add' book.pk %}" method="post" class="d-inline">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-success">Add to Cart</button>
+                    <button type="submit" class="btn btn-sm btn-success">{% translate "Add to Cart" %}</button>
                 </form>
-                <a href="{% url 'books:book_update' book.pk %}" class="btn btn-sm btn-warning">Edit</a>
-                <a href="{% url 'books:book_delete' book.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                <a href="{% url 'books:book_update' book.pk %}" class="btn btn-sm btn-warning">{% translate "Edit" %}</a>
+                <a href="{% url 'books:book_delete' book.pk %}" class="btn btn-sm btn-danger">{% translate "Delete" %}</a>
             </div>
         </li>
     {% empty %}
-        <li class="list-group-item">No books found.</li>
+        <li class="list-group-item">{% translate "No books found." %}</li>
     {% endfor %}
 </ul>
 
 {% if is_paginated %}
     <div class="text-muted">
-        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        {% blocktranslate with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktranslate %}
     </div>
 {% endif %}
 {% endblock %}

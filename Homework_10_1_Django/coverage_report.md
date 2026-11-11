@@ -1,0 +1,22 @@
+| Name                                           |    Stmts |     Miss |   Cover |
+|----------------------------------------------- | -------: | -------: | ------: |
+| homework\_10\_1\_django\\\_\_init\_\_.py       |        0 |        0 |    100% |
+| homework\_10\_1\_django\\asgi.py               |        4 |        4 |      0% |
+| homework\_10\_1\_django\\settings.py           |       34 |        0 |    100% |
+| homework\_10\_1\_django\\test\_settings.py     |        4 |        0 |    100% |
+| homework\_10\_1\_django\\urls.py               |        3 |        0 |    100% |
+| homework\_10\_1\_django\\wsgi.py               |        4 |        4 |      0% |
+| manage.py                                      |       11 |       11 |      0% |
+| my\_app\\\_\_init\_\_.py                       |        0 |        0 |    100% |
+| my\_app\\admin.py                              |       29 |        0 |    100% |
+| my\_app\\apps.py                               |        3 |        0 |    100% |
+| my\_app\\cart.py                               |       42 |        0 |    100% |
+| my\_app\\forms.py                              |        8 |        0 |    100% |
+| my\_app\\middleware.py                         |       14 |        0 |    100% |
+| my\_app\\migrations\\0001\_initial.py          |        9 |        0 |    100% |
+| my\_app\\migrations\\0002\_order\_orderitem.py |        5 |        0 |    100% |
+| my\_app\\migrations\\\_\_init\_\_.py           |        0 |        0 |    100% |
+| my\_app\\models.py                             |       44 |        0 |    100% |
+| my\_app\\urls.py                               |        5 |        0 |    100% |
+| my\_app\\views.py                              |      118 |        4 |     97% |
+| **TOTAL**                                      |  **337** |   **23** | **93%** |
