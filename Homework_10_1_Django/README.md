@@ -176,7 +176,7 @@ Document how AI was used in this project:
   representations (str), and edge cases (e.g., negative prices, missing optional fields). 
   Do not implement the solution instantly, write the code here for my review and wait for 
   my decision weather to implement it or not. You MUST include the exact comment 
-  # Generated with AI, reviewed and modified inside every test method.
+  "Generated with AI, reviewed and modified inside every test method."
   Add short, clear docstrings to test classes and functions.
   Change only the test file.  
   **Output:** A ready-to-run test file and a coverage report.
